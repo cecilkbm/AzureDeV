@@ -282,15 +282,3 @@ resource "azurerm_subnet" "wanic_subnet" {
   virtual_network_name = azurerm_virtual_network.west_vnet.name
   address_prefixes     = ["10.0.3.0/24"]
 }
-
-/*output "ny_vm_ip" {
-  value = azurerm_linux_virtual_machine.ny_vm.public_ip_address
-}
-
-output "boston_vm_ip" {
-  value = azurerm_linux_virtual_machine.boston_vm.public_ip_address
-}
-
-output "seattle_vm_ip" {
-  value = azurerm_linux_virtual_machine.seattle_vm.public_ip_address
-}*/
