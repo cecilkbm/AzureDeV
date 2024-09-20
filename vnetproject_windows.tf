@@ -1,7 +1,7 @@
 provider "azurerm" {
   features {}
 
-  subscription_id = "bdccc3a4-f427-4c00-af5f-cdbb1b3f5884"
+  subscription_id = "00000000-0000-0000-0000-000000000000"
 }
 
 # Resource Group for East US (New York and Boston offices)
