@@ -112,7 +112,7 @@ resource "azurerm_network_security_group" "east_nsg" {
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "3389"
+    destination_port_range     = "22"
     source_address_prefix      = "*"
     destination_address_prefix = "10.0.0.0/16"
   }
@@ -138,7 +138,7 @@ resource "azurerm_network_security_group" "west_nsg" {
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "3389"
+    destination_port_range     = "22"
     source_address_prefix      = "*"
     destination_address_prefix = "10.0.0.0/16"
   }
