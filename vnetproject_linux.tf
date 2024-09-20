@@ -107,14 +107,18 @@ resource "azurerm_network_security_group" "east_nsg" {
 
   security_rule {
     name                       = "east0"
-    priority                   = 100
+    priority                   = 1000
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "*"
+    destination_port_range     = "3389"
     source_address_prefix      = "*"
-    destination_address_prefix = "*"
+    destination_address_prefix = "10.0.0.0/16"
+  }
+
+  tags = {
+    environment = "Development"
   }
 
   tags = {
@@ -129,14 +133,14 @@ resource "azurerm_network_security_group" "west_nsg" {
 
   security_rule {
     name                       = "west0"
-    priority                   = 100
+    priority                   = 1000
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "*"
+    destination_port_range     = "3389"
     source_address_prefix      = "*"
-    destination_address_prefix = "*"
+    destination_address_prefix = "10.0.0.0/16"
   }
 
   tags = {
