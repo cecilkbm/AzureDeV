@@ -153,10 +153,11 @@ resource "azurerm_linux_virtual_machine" "ny_vm" {
   name                = "ny-office-vm"
   resource_group_name = azurerm_resource_group.east_rg.name
   location            = azurerm_resource_group.east_rg.location
+  network_interface_ids = [azurerm_network_interface.ny_nic.id]
   size                = "Standard_DS1_v2"
   admin_username      = "adminuser"
   admin_password      = "P@ssw0rd123!"
-  network_interface_ids = [azurerm_network_interface.ny_nic.id]
+  
 
   os_disk {
     caching              = "ReadWrite"
@@ -175,10 +176,11 @@ resource "azurerm_linux_virtual_machine" "boston_vm" {
   name                = "boston-office-vm"
   resource_group_name = azurerm_resource_group.east_rg.name
   location            = azurerm_resource_group.east_rg.location
+  network_interface_ids = [azurerm_network_interface.boston_nic.id]
   size                = "Standard_DS1_v2"
   admin_username      = "adminuser"
   admin_password      = "P@ssw0rd123!"
-  network_interface_ids = [azurerm_network_interface.boston_nic.id]
+  
 
   os_disk {
     caching              = "ReadWrite"
@@ -197,10 +199,11 @@ resource "azurerm_linux_virtual_machine" "seattle_vm" {
   name                = "seattle-office-vm"
   resource_group_name = azurerm_resource_group.west_rg.name
   location            = azurerm_resource_group.west_rg.location
+  network_interface_ids = [azurerm_network_interface.seattle_nic.id]
   size                = "Standard_DS1_v2"
   admin_username      = "adminuser"
   admin_password      = "P@ssw0rd123!"
-  network_interface_ids = [azurerm_network_interface.seattle_nic.id]
+  
 
   os_disk {
     caching              = "ReadWrite"
@@ -215,10 +218,34 @@ resource "azurerm_linux_virtual_machine" "seattle_vm" {
 }
 
 #Public IP address for East(NY)
-resource "azurerm_public_ip" "eastny_ip" {
-  name                = "newyork_office_publicip"
+resource "azurerm_public_ip" "ny_publicip" {
+  name                = "NewYork_OfficePublicIP"
   resource_group_name = azurerm_resource_group.east_rg.name
   location            = azurerm_resource_group.east_rg.location
+  allocation_method   = "Static"
+
+  tags = {
+    environment = "Development"
+  }
+}
+
+#Public IP address for East(MA)
+resource "azurerm_public_ip" "ma_publicip" {
+  name                = "Boston_OfficePublicIP"
+  resource_group_name = azurerm_resource_group.east_rg.name
+  location            = azurerm_resource_group.east_rg.location
+  allocation_method   = "Static"
+
+  tags = {
+    environment = "Development"
+  }
+}
+
+#Public IP address for West(WA)
+resource "azurerm_public_ip" "wa_publicip" {
+  name                = "Seattle_OfficePublicIP"
+  resource_group_name = azurerm_resource_group.west_rg.name
+  location            = azurerm_resource_group.west_rg.location
   allocation_method   = "Static"
 
   tags = {
@@ -235,7 +262,7 @@ resource "azurerm_network_interface" "ny_nic" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.east_subnet0.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          =  azurerm_public_ip.eastny_ip.id
+    public_ip_address_id          =  azurerm_public_ip.ny_publicip.id
   }
 }
 
@@ -248,6 +275,7 @@ resource "azurerm_network_interface" "boston_nic" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.east_subnet1.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          =  azurerm_public_ip.ma_publicip.id
   }
 }
 
@@ -260,6 +288,7 @@ resource "azurerm_network_interface" "seattle_nic" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.west_subnet.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          =  azurerm_public_ip.wa_publicip.id
   }
 }
 
@@ -268,7 +297,7 @@ resource "azurerm_subnet" "nynic_subnet" {
   name                 = "newyorknic-subnet"
   resource_group_name  = azurerm_resource_group.east_rg.name
   virtual_network_name = azurerm_virtual_network.east_vnetNY.name
-  address_prefixes     = ["10.0.1.0/24"]
+  address_prefixes     = ["10.1.1.0/24"]
 }
 
 # Network Interface Subnet for Boston NIC
@@ -276,7 +305,7 @@ resource "azurerm_subnet" "manic_subnet" {
   name                 = "bostonic-subnet"
   resource_group_name  = azurerm_resource_group.east_rg.name
   virtual_network_name = azurerm_virtual_network.east_vnetMA.name
-  address_prefixes     = ["10.0.2.0/24"]
+  address_prefixes     = ["10.2.1.0/24"]
 }
 
 # Network Interface Subnet for Seatle NIC
@@ -284,5 +313,5 @@ resource "azurerm_subnet" "wanic_subnet" {
   name                 = "seatlenic-subnet"
   resource_group_name  = azurerm_resource_group.west_rg.name
   virtual_network_name = azurerm_virtual_network.west_vnet.name
-  address_prefixes     = ["10.0.3.0/24"]
+  address_prefixes     = ["10.3.1.0/24"]
 }
