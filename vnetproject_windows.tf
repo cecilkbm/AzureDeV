@@ -220,18 +220,6 @@ resource "azurerm_windows_virtual_machine" "seattle_vm" {
   admin_password = "P@ssw0rd1234!"
 }
 
-#Public IP address for East(NY)
-resource "azurerm_public_ip" "eastny_ip" {
-  name                = "newyork_office_publicip"
-  resource_group_name = azurerm_resource_group.east_rg.name
-  location            = azurerm_resource_group.east_rg.location
-  allocation_method   = "Static"
-
-  tags = {
-    environment = "Development"
-  }
-}
-
 # Network Interface for New York VM
 resource "azurerm_network_interface" "ny_nic" {
   name                = "ny-office-nic"
@@ -292,15 +280,3 @@ resource "azurerm_subnet" "wanic_subnet" {
   virtual_network_name = azurerm_virtual_network.west_vnet.name
   address_prefixes     = ["10.0.3.0/24"]
 }
-
-/*output "ny_vm_ip" {
-  value = azurerm_linux_virtual_machine.ny_vm.public_ip_address
-}
-
-output "boston_vm_ip" {
-  value = azurerm_linux_virtual_machine.boston_vm.public_ip_address
-}
-
-output "seattle_vm_ip" {
-  value = azurerm_linux_virtual_machine.seattle_vm.public_ip_address
-}*/
